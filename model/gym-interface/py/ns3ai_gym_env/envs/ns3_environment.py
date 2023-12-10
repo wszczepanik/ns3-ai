@@ -25,13 +25,13 @@ class Ns3Env(gym.Env):
             mtype = boxSpacePb.dtype
 
             if mtype == pb.INT:
-                mtype = np.int
+                mtype = np.int64
             elif mtype == pb.UINT:
-                mtype = np.uint
+                mtype = np.uint64
             elif mtype == pb.DOUBLE:
-                mtype = np.float
+                mtype = np.double
             else:
-                mtype = np.float
+                mtype = float
 
             space = spaces.Box(low=low, high=high, shape=shape, dtype=mtype)
 
