@@ -127,7 +127,9 @@ class Ns3Env(gym.Env):
 
         self.msgInterface.PySendBegin()
         self.msgInterface.GetPy2CppStruct().size = len(reply_str)
-        self.msgInterface.GetPy2CppStruct().get_buffer_full()[:len(reply_str)] = reply_str
+        self.msgInterface.GetPy2CppStruct().get_buffer_full()[
+            : len(reply_str)
+        ] = reply_str
         self.msgInterface.PySendEnd()
         return True
 
@@ -139,7 +141,9 @@ class Ns3Env(gym.Env):
         assert len(replyMsg) <= py_binding.msg_buffer_size
         self.msgInterface.PySendBegin()
         self.msgInterface.GetPy2CppStruct().size = len(replyMsg)
-        self.msgInterface.GetPy2CppStruct().get_buffer_full()[:len(replyMsg)] = replyMsg
+        self.msgInterface.GetPy2CppStruct().get_buffer_full()[
+            : len(replyMsg)
+        ] = replyMsg
         self.msgInterface.PySendEnd()
 
         self.newStateRx = False
@@ -198,19 +202,19 @@ class Ns3Env(gym.Env):
             shape = [len(actions)]
             boxContainerPb.shape.extend(shape)
 
-            if spaceDesc.dtype in ['int', 'int8', 'int16', 'int32', 'int64']:
+            if spaceDesc.dtype in ["int", "int8", "int16", "int32", "int64"]:
                 boxContainerPb.dtype = pb.INT
                 boxContainerPb.intData.extend(actions)
 
-            elif spaceDesc.dtype in ['uint', 'uint8', 'uint16', 'uint32', 'uint64']:
+            elif spaceDesc.dtype in ["uint", "uint8", "uint16", "uint32", "uint64"]:
                 boxContainerPb.dtype = pb.UINT
                 boxContainerPb.uintData.extend(actions)
 
-            elif spaceDesc.dtype in ['float', 'float32', 'float64']:
+            elif spaceDesc.dtype in ["float", "float32", "float64"]:
                 boxContainerPb.dtype = pb.FLOAT
                 boxContainerPb.floatData.extend(actions)
 
-            elif spaceDesc.dtype in ['double']:
+            elif spaceDesc.dtype in ["double"]:
                 boxContainerPb.dtype = pb.DOUBLE
                 boxContainerPb.doubleData.extend(actions)
 
@@ -259,7 +263,9 @@ class Ns3Env(gym.Env):
         assert len(replyMsg) <= py_binding.msg_buffer_size
         self.msgInterface.PySendBegin()
         self.msgInterface.GetPy2CppStruct().size = len(replyMsg)
-        self.msgInterface.GetPy2CppStruct().get_buffer_full()[:len(replyMsg)] = replyMsg
+        self.msgInterface.GetPy2CppStruct().get_buffer_full()[
+            : len(replyMsg)
+        ] = replyMsg
         self.msgInterface.PySendEnd()
         self.newStateRx = False
         return True
@@ -273,7 +279,7 @@ class Ns3Env(gym.Env):
 
     def __init__(self, targetName, ns3Path, ns3Settings=None, shmSize=4096):
         if self._created:
-            raise Exception('Error: Ns3Env is singleton')
+            raise Exception("Error: Ns3Env is singleton")
         self._created = True
         self.exp = Experiment(targetName, ns3Path, py_binding, shmSize=shmSize)
         self.ns3Settings = ns3Settings
@@ -315,7 +321,7 @@ class Ns3Env(gym.Env):
         self.gameOverReason = None
         self.extraInfo = None
 
-        self.msgInterface = self.exp.run(show_output=True)
+        self.msgInterface = self.exp.run(setting=self.ns3Settings, show_output=True)
         self.initialize_env()
         # get first observations
         self.rx_env_state()
@@ -324,7 +330,7 @@ class Ns3Env(gym.Env):
         obs = self.get_obs()
         return obs, {}
 
-    def render(self, mode='human'):
+    def render(self, mode="human"):
         return
 
     def get_random_action(self):
